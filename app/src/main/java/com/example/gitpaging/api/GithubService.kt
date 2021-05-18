@@ -1,11 +1,12 @@
 package com.example.gitpaging.api
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-interface RetrofitInterface {
+const val IN_QUALIFIER = "in:name,description"
 
 
     interface GithubService {
@@ -20,8 +21,11 @@ interface RetrofitInterface {
             private const val BASE_URL = "https://api.github.com/"
 
             fun create(): GithubService {
+                val logger = HttpLoggingInterceptor()
+                logger.level = HttpLoggingInterceptor.Level.BASIC
 
                 val client = OkHttpClient.Builder()
+                    .addInterceptor(logger)
                     .build()
                 return Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -32,5 +36,3 @@ interface RetrofitInterface {
             }
         }
     }
-
-}
